@@ -1,0 +1,37 @@
+expression csv-10k =
+		let
+		    Source = Folder.Files("C:\Users\leand\Downloads\csv-10k\Database")
+		in
+		    Source
+	lineageTag: b6cc89c8-9bd8-4a98-ba34-8933288f3a04
+	queryGroup: Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression Tables = ```
+		let
+		    Source = #"csv-10k",
+		    Removed_Columns = 
+		        Table.RemoveColumns(
+		            Source,
+		            {"Extension", "Date accessed", "Date modified", "Date created", "Attributes", "Folder Path"}),
+		
+		    To_table =
+		        Table.AddColumn(
+		            Removed_Columns,
+		            "Binary_to_table",
+		            each Csv.Document([Content])
+		        ),
+		    #"Filtered Rows" = Table.SelectRows(To_table, each ([Name] = "customer.csv" or [Name] = "product.csv" or [Name] = "sales.csv" or [Name] = "store.csv"))
+		in
+		    #"Filtered Rows"
+		```
+	lineageTag: 70bd4f0e-3905-4639-a4f1-02a360344728
+	queryGroup: Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

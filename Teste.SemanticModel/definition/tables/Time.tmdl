@@ -1,0 +1,31 @@
+table Time
+	lineageTag: 7b631020-4147-4aa5-9067-13ef936b6d27
+
+	calculationGroup
+
+		calculationItem Current = SELECTEDMEASURE()
+
+		calculationItem 'Preview year' =
+				CALCULATE(
+				    SELECTEDMEASURE(),
+				    SAMEPERIODLASTYEAR( 'Date'[Date] )
+				)
+
+		calculationItem Year-to-Date =
+				TOTALYTD(
+				    SELECTEDMEASURE(),
+				    'Date'[Date]
+				)
+
+	column 'Time Calculation'
+		dataType: string
+		lineageTag: bc253023-b029-40e0-974e-b97bfe6daf98
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		lineageTag: 5f1f884c-3b14-40c8-8c81-59057c785a96
+		sourceColumn: Ordinal
+

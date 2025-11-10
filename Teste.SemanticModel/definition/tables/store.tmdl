@@ -1,0 +1,135 @@
+table store
+	lineageTag: d913e275-f6ea-4b32-b36f-3e4278c7e305
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: bb2e4995-89d8-4cf8-b5fe-65ad990d678c
+		summarizeBy: none
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreCode
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e580865-38d1-4802-b34e-0c0554823e33
+		summarizeBy: count
+		sourceColumn: StoreCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeoAreaKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e45a4951-7e3c-4e77-b8a1-b5f2f51d9c1b
+		summarizeBy: count
+		sourceColumn: GeoAreaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryCode
+		dataType: string
+		lineageTag: d0504edd-325d-4572-aeb9-ea732d4c73b5
+		summarizeBy: none
+		sourceColumn: CountryCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryName
+		dataType: string
+		lineageTag: 84105127-b2f0-419c-a908-14ac2b10512f
+		summarizeBy: none
+		sourceColumn: CountryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: ab615b2f-3fe2-4324-b5dd-7241f948c0d1
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column OpenDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 087324db-411b-4b64-b724-7bc72148f601
+		summarizeBy: none
+		sourceColumn: OpenDate
+
+		variation Variation
+			isDefault
+			relationship: 80199e24-20be-4d7a-8ed0-0e4c2911bcfd
+			defaultHierarchy: LocalDateTable_cd8299c7-ab5d-4ed8-86f0-d0071b623ba2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CloseDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c887b5b3-c44f-4242-973d-938ae89feca5
+		summarizeBy: none
+		sourceColumn: CloseDate
+
+		variation Variation
+			isDefault
+			relationship: b0f75f98-a8c9-41b2-aca6-3e712a56675d
+			defaultHierarchy: LocalDateTable_32c872a2-ee5f-4a2a-90a8-4701412ad437.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Description
+		dataType: string
+		lineageTag: 1070bdf0-9ce2-4db4-aab3-f04f14bc3c68
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column SquareMeters
+		dataType: int64
+		formatString: 0
+		lineageTag: 3952bdbb-5f9a-4683-9571-6ab67c7aacf5
+		summarizeBy: sum
+		sourceColumn: SquareMeters
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: a1234f6a-6151-415e-80e6-b3838a4f653a
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition store = m
+		mode: import
+		queryGroup: Transform
+		source = ```
+				let
+				
+				    Source = Tables,
+				    Filtered_Rows = 
+				        Table.SelectRows(
+				            Source, 
+				            each ([Name] = "store.csv")
+				        ),
+				    #"Removed Columns" = Table.RemoveColumns(Filtered_Rows,{"Content", "Name"}),
+				    #"Expanded Binary_to_table" = Table.ExpandTableColumn(#"Removed Columns", "Binary_to_table", {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11"}, {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11"}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Expanded Binary_to_table", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"StoreKey", Int64.Type}, {"StoreCode", Int64.Type}, {"GeoAreaKey", Int64.Type}, {"CountryCode", type text}, {"CountryName", type text}, {"State", type text}, {"OpenDate", type date}, {"CloseDate", type date}, {"Description", type text}, {"SquareMeters", Int64.Type}, {"Status", type text}})
+				in
+				    #"Changed Type"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

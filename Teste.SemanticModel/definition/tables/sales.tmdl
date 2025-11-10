@@ -1,0 +1,235 @@
+table sales
+	lineageTag: 7af71bc8-5441-4746-8100-c09b11875e8b
+
+	measure 'Sales Amount' = ```
+			
+			VAR
+			    TotalSales =
+			        SUMX(
+			            Sales,
+			            Sales[Quantity] * Sales[NetPrice]
+			        )
+			RETURN
+			    TotalSales
+			    
+			```
+		formatString: #,##0.00
+		displayFolder: Key Measures
+		lineageTag: 2c3accbc-0976-48fd-ad3a-8667a1f55a3f
+
+	measure 'Total Cost' = ```
+			
+			SUMX(
+			    Sales,
+			    Sales[Quantity] * Sales[UnitCost]
+			)
+			    
+			```
+		formatString: #,##0.00
+		displayFolder: Key Measures
+		lineageTag: fb25c945-3b5b-4781-9073-b803119e0e5b
+
+	measure Margin = [Sales Amount] - [Total Cost]
+		formatString: #,##0.00
+		displayFolder: Key Measures
+		lineageTag: 6541cbc1-ddd7-4b9e-9250-b64570b4a546
+
+	measure 'Margin %' = ```
+			
+			DIVIDE(
+			    [Margin],
+			    [Sales Amount]
+			)
+			    
+			```
+		formatString: 0.00 %
+		displayFolder: Key Measures
+		lineageTag: fd81e115-620b-4208-ae68-15d37c5e697a
+
+	measure 'Total Quantity' = SUM( Sales[Quantity] )
+		formatString: #,##0
+		displayFolder: Key Measures
+		lineageTag: 14d3ea8f-450e-4a4f-a2a4-5f2c49b350c8
+
+	measure 'Order Count' = DISTINCTCOUNT( Sales[OrderKey] )
+		formatString: #,##0
+		displayFolder: Key Measures
+		lineageTag: 421a36ce-944c-44ef-8835-6cecf1754398
+
+	measure 'Sales YTD' = ```
+			
+			TOTALYTD(
+			    [Sales Amount],
+			    'Date'[Date]
+			)
+			    
+			```
+		formatString: #,##0.00
+		displayFolder: Key Measures
+		lineageTag: 30f91d03-0c3a-4424-a92d-2508749f66d6
+
+	measure 'Sales PY' = ```
+			
+			CALCULATE(
+			    [Sales Amount],
+			    SAMEPERIODLASTYEAR( 'Date'[Date] )
+			)
+			    
+			```
+		formatString: #,##0.00
+		displayFolder: Key Measures
+		lineageTag: c15bd870-2b47-418d-a310-62d1bae6ba17
+
+	column OrderKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ab41a35-8784-4c97-ae3f-467bd9879eb0
+		summarizeBy: count
+		sourceColumn: OrderKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 7237b618-d502-487f-8180-4da551c380aa
+		summarizeBy: sum
+		sourceColumn: LineNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b0742644-00f7-4dbd-b617-bf6eab9724eb
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: bbe79273-b77a-44e0-bc44-9be187567647
+			defaultHierarchy: LocalDateTable_74245ee0-c7ec-4580-8810-44f9e0e8b8bd.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveryDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 65d28ebd-93c6-49a5-b233-c4d0a5713214
+		summarizeBy: none
+		sourceColumn: DeliveryDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4b0f77e5-5905-41a5-a13d-2ac63383cb24
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 66604ea8-44b9-4aa6-9294-766f8ee62a87
+		summarizeBy: none
+		sourceColumn: StoreKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 5be0aac3-a2c3-4efd-94c1-c3013c06592b
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 1d5b4ad9-8bf4-46a4-82c0-e092fc0fccf5
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: 7bc9a204-1f73-4714-97b2-9b05bb5a48d2
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetPrice
+		dataType: double
+		lineageTag: 9ac44696-9f90-40c6-b73b-0801442521d6
+		summarizeBy: sum
+		sourceColumn: NetPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column UnitCost
+		dataType: double
+		lineageTag: 7fb81d7e-310f-404a-8f61-e884f63875c3
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 27edafba-5f16-4f71-9749-83f8cb19830e
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExchangeRate
+		dataType: double
+		lineageTag: 9bc3c09d-31bc-47dc-80ff-67285e3bc0fa
+		summarizeBy: sum
+		sourceColumn: ExchangeRate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition sales = m
+		mode: import
+		queryGroup: Transform
+		source = ```
+				let
+				
+				    Source = Tables,
+				    Filtered_Rows = 
+				        Table.SelectRows(
+				            Source, 
+				            each ([Name] = "sales.csv")
+				        ),
+				    #"Removed Columns" = Table.RemoveColumns(Filtered_Rows,{"Content", "Name"}),
+				    #"Expanded Binary_to_table" = Table.ExpandTableColumn(#"Removed Columns", "Binary_to_table", {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13"}, {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13"}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Expanded Binary_to_table", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"OrderKey", Int64.Type}, {"LineNumber", Int64.Type}, {"OrderDate", type date}, {"DeliveryDate", type date}, {"CustomerKey", Int64.Type}, {"StoreKey", Int64.Type}, {"ProductKey", Int64.Type}, {"Quantity", Int64.Type}, {"UnitPrice", type number}, {"NetPrice", type number}, {"UnitCost", type number}, {"CurrencyCode", type text}, {"ExchangeRate", type number}})
+				in
+				    #"Changed Type"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

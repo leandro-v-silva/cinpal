@@ -1,0 +1,46 @@
+relationship bbe79273-b77a-44e0-bc44-9be187567647
+	joinOnDateBehavior: datePartOnly
+	fromColumn: sales.OrderDate
+	toColumn: LocalDateTable_74245ee0-c7ec-4580-8810-44f9e0e8b8bd.Date
+
+relationship a51408ed-6725-404e-8d33-a2354b762a5c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customer.StartDT
+	toColumn: LocalDateTable_b0e4995f-d837-4f31-ba1e-62a51de5a074.Date
+
+relationship b3e8baa7-6a69-47f3-ad15-b75df5471f26
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customer.EndDT
+	toColumn: LocalDateTable_b1cbe7d7-a38c-468b-afb6-e9e8916f0e61.Date
+
+relationship 2b185df4-7334-43f8-8724-7767a96238e5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: customer.Birthday
+	toColumn: LocalDateTable_7f53f1c5-232c-4185-8eab-3beb0eaa08b1.Date
+
+relationship 80199e24-20be-4d7a-8ed0-0e4c2911bcfd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: store.OpenDate
+	toColumn: LocalDateTable_cd8299c7-ab5d-4ed8-86f0-d0071b623ba2.Date
+
+relationship b0f75f98-a8c9-41b2-aca6-3e712a56675d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: store.CloseDate
+	toColumn: LocalDateTable_32c872a2-ee5f-4a2a-90a8-4701412ad437.Date
+
+relationship AutoDetected_5188c8aa-a74d-42bf-88c6-66877345d02c
+	fromColumn: sales.CustomerKey
+	toColumn: customer.CustomerKey
+
+relationship AutoDetected_5961dc9c-e18c-4348-bb87-5f6693e4f6fb
+	fromColumn: sales.StoreKey
+	toColumn: store.StoreKey
+
+relationship AutoDetected_b1014258-d96e-4a42-bee1-b145fe5ab8ce
+	fromColumn: sales.ProductKey
+	toColumn: product.ProductKey
+
+relationship 83cc3d16-18e4-2066-c05c-1baa268a472d
+	fromColumn: sales.DeliveryDate
+	toColumn: Date.Date
+

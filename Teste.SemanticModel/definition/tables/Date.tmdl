@@ -1,0 +1,157 @@
+table Date
+	lineageTag: 089b651b-b154-4297-98ac-dcda15886736
+	dataCategory: Time
+
+	column Date
+		isKey
+		lineageTag: 447e99e4-51cb-4961-aebe-4ee506894e95
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateKey
+		lineageTag: 4edd251f-6b3d-4eb9-a6d8-b4f096fbda05
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DateKey]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		lineageTag: 7eaf4f22-368c-4291-8707-4cca5919b0c1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column QuarterNumber
+		lineageTag: 3b10c431-4544-4575-8ab9-602912e43406
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [QuarterNumber]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: d247ddd8-b697-4788-b484-f98a3a478690
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarter
+		lineageTag: 02b4896e-786b-403a-8c4e-5e3ed8e79fa5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarterSort
+		lineageTag: 54dacec6-c2b0-4b70-bb8d-e69e2de8f2c4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearQuarterSort]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumber
+		lineageTag: fd3bf679-e451-4c77-9e35-0622f81671d6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthNumber]
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		lineageTag: 9723fca3-61fe-4c41-96d3-4f7ed08d88d1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthName]
+		sortByColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNameShort
+		lineageTag: e0b9ea9a-2bd2-47db-a65c-2a3cc37d0a77
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [MonthNameShort]
+		sortByColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		lineageTag: da122646-ecae-4fac-85f7-f23b46d317cb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [YearMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfMonth
+		lineageTag: c185a080-6e01-4ce2-8146-775d85f98d55
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfMonth]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekNumber
+		lineageTag: 4a6afaf8-40ca-43f8-86b0-d58c4f247ea6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeekNumber]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekName
+		lineageTag: d23a364e-7f98-4058-95d1-834c970d36fd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeekName]
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekNameShort
+		lineageTag: 3740747b-f0c6-4e91-99eb-d3290c7691b1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DayOfWeekNameShort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'New Calculated Table' = calculated
+		mode: import
+		source = ```
+				VAR
+				    MinDate = MIN( Sales[OrderDate] )
+				VAR
+				    MaxDate = MAX( Sales[OrderDate] )
+				VAR
+				    BaseCalendar =
+				        CALENDAR( MinDate, MaxDate )
+				RETURN
+				    ADDCOLUMNS (
+				        BaseCalendar,
+				        "DateKey", FORMAT( [Date], "yyyyMMdd" ), 
+				        "Year", YEAR( [Date] ),
+				        "QuarterNumber", QUARTER( [Date] ),
+				        "Quarter", "Q" & QUARTER( [Date] ),
+				        "YearQuarter", FORMAT( [Date], "yyyy" ) & "-Q" & QUARTER( [Date] ),
+				        "YearQuarterSort", FORMAT( [Date], "yyyy" ) & QUARTER( [Date] ),
+				        "MonthNumber", MONTH( [Date] ),
+				        "MonthName", FORMAT( [Date], "mmmm" ),
+				        "MonthNameShort", FORMAT( [Date], "mmm" ),
+				        "YearMonth", FORMAT( [Date], "yyyy-mm" ),
+				        "DayOfMonth", DAY( [Date] ),
+				        "DayOfWeekNumber", WEEKDAY( [Date], 2 ),
+				        "DayOfWeekName", FORMAT( [Date], "dddd" ),
+				        "DayOfWeekNameShort", FORMAT( [Date], "ddd" )
+				    )
+				```
+

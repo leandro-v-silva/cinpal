@@ -1,0 +1,149 @@
+table product
+	lineageTag: c05f9b18-38a9-4a87-8403-4cce259446c5
+
+	column ProductKey
+		dataType: int64
+		formatString: 0
+		lineageTag: e0d46537-cc3c-4371-bbd9-b014c156e59b
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCode
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d0464d6-3635-4ff8-9d84-339fba9902ff
+		summarizeBy: none
+		sourceColumn: ProductCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 4a6af473-be16-4ef8-8208-b83aca551184
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: e2d207da-ad77-4cc0-b14a-8d35a1b5a5e9
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: bbe30964-fd0b-4fa7-a5a5-37b581b7434b
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Color
+		dataType: string
+		lineageTag: d6f04371-30d4-4508-ad96-c597c076019f
+		summarizeBy: none
+		sourceColumn: Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeightUnit
+		dataType: string
+		lineageTag: de7e55bb-058a-49d5-8fe3-40251eaf650a
+		summarizeBy: none
+		sourceColumn: WeightUnit
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: 80a9d33a-54d4-42bb-8aea-f82287980649
+		summarizeBy: none
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cost
+		dataType: double
+		lineageTag: 264c55ab-2137-4d53-9b59-d3fc8bfd8193
+		summarizeBy: none
+		sourceColumn: Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Price
+		dataType: double
+		lineageTag: e9d9baea-d93d-4089-8652-df77a1993c27
+		summarizeBy: none
+		sourceColumn: Price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: b71b9e5f-a9af-4f3a-8a38-d233cb95713a
+		summarizeBy: none
+		sourceColumn: CategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: 6726827e-afb7-4d8c-9497-9b44c63f361b
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 97b81b9c-c7b5-4aae-8456-1a33f02898a9
+		summarizeBy: none
+		sourceColumn: SubCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubCategoryName
+		dataType: string
+		lineageTag: e1c3b90d-b114-4479-ae4e-88a5deb88bf4
+		summarizeBy: none
+		sourceColumn: SubCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition product = m
+		mode: import
+		queryGroup: Transform
+		source = ```
+				let
+				
+				    Source = Tables,
+				    Filtered_Rows = 
+				        Table.SelectRows(
+				            Source, 
+				            each ([Name] = "product.csv")
+				        ),
+				    #"Removed Columns" = Table.RemoveColumns(Filtered_Rows,{"Content", "Name"}),
+				    #"Expanded Binary_to_table" = Table.ExpandTableColumn(#"Removed Columns", "Binary_to_table", {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14"}, {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14"}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Expanded Binary_to_table", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductKey", Int64.Type}, {"ProductCode", Int64.Type}, {"ProductName", type text}, {"Manufacturer", type text}, {"Brand", type text}, {"Color", type text}, {"WeightUnit", type text}, {"Weight", type number}, {"Cost", type number}, {"Price", type number}, {"CategoryKey", Int64.Type}, {"CategoryName", type text}, {"SubCategoryKey", Int64.Type}, {"SubCategoryName", type text}})
+				in
+				    #"Changed Type"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
