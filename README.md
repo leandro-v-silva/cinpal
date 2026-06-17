@@ -31,9 +31,3 @@ gantt
     section Testing & Deploy
     QA & Bug Fixing          : qa1, after dev2, 5d
     Production Release       : milestone, after qa1, 0d
-
-    %% Relacionamentos
-    FatoSales -- OrderDate --> DimDate
-    FatoSales -- ProductKey --> DimProduct
-    FatoSales -- CustomerKey --> DimCustomer
-    FatoSales -- StoreKey --> DimStore
